@@ -1,0 +1,18 @@
+- name: Setup auto-update
+  hosts: all
+  become: yes
+  tasks:
+    - name: Install dnf-automatic
+      dnf:
+        name: dnf-automatic
+        state: present
+    - name: Setup automatic updates in config
+      replace:
+        path: /etc/dnf/automatic.conf
+        regexp: '^apply_updates\ =\ no$'
+        replace: 'apply_updates = yes'
+    - name: Enable automatic updates
+      systemd:
+        name: dnf-automatic.timer
+        enabled: yes
+        state: started

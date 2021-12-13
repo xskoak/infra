@@ -1,3 +1,5 @@
 .ansible_pass
 ansible.cfg
 */*.swp
+*.swp
+.become_pass
