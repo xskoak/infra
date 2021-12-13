@@ -1,4 +1,4 @@
-- name: Setup auto-update
+- name: Initial setup
   hosts: all
   become: yes
   tasks:
@@ -16,3 +16,11 @@
         name: dnf-automatic.timer
         enabled: yes
         state: started
+    - name: Setup hostnames
+      lineinfile:
+        dest: /etc/hosts
+        regexp: '.*{{ item }}$'
+        line: "{{ hostvars[item].ansible_host }} {{item}}"
+        state: present
+      when: hostvars[item].ansible_host is defined
+      loop: "{{ groups.all }}"
